@@ -8,7 +8,7 @@ entity Periferico is
 		clock: in STD_LOGIC;
 		reset: in STD_LOGIC;
 		-- Interface com a interface de comunicacao
-		dadoDaInterface: in STD_LOGIC_VECTOR(7 downto 0);
+		dadoDaInterface: inout STD_LOGIC_VECTOR(7 downto 0);
 		dadoRecebido: in STD_LOGIC
 	);
 end Periferico;
@@ -16,6 +16,7 @@ end Periferico;
 architecture Periferico of Periferico is
 	signal dado: STD_LOGIC_VECTOR(7 downto 0);
 	signal contador: STD_LOGIC_VECTOR(15 downto 0);
+    signal cont_delay: STD_LOGIC_VECTOR(downto 0);
 begin
 	Recepcao: process(clock, reset)
 	begin
