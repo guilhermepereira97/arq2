@@ -32,7 +32,7 @@ begin
 				transmitirDado <= '1';
 			else
 				transmitirDado <= '0';
-                dadoRecebidoOut <= 
+                --dadoRecebidoOut <= 
                 
 			end if;
 		end if;

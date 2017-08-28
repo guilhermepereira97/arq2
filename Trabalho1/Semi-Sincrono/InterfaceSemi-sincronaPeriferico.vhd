@@ -17,7 +17,8 @@ entity InterfacePeriferico is
 		-- Interface de comunicacao assincrona 
 		receive: in STD_LOGIC; -- send
 		accept: out STD_LOGIC; -- ack
-		dataIn: in STD_LOGIC_VECTOR(7 downto 0);
+		dataIn: in STD_LOGIC_VECTOR(7 downto 0);sim:/tbassincrono/InterfaceCPU/transmitirDado
+
 		-- Interface com a maquina local
 		dadoParaMaq: out STD_LOGIC_VECTOR(7 downto 0);
 		dadoRecebido: out STD_LOGIC
@@ -34,7 +35,7 @@ begin
 		if reset = '1' then
 			dadoRecebido <= '0';
 			accept <= '0';
-		elsif clock'event and clock = '0' then
+		elsif clock'event and clock = '1' then
 			case estadoTx is
 				when esperaSend =>
                     if receive = '1' then
@@ -42,14 +43,14 @@ begin
                         accept <= '1';
                         regDataIn <= dataIn;
                         estadoTx <= gerenciaAck;
+                    else 
+                        estadoTx<=esperaSend;
                     end if;
 
                 when gerenciaAck =>
                     dadoRecebido <= '0';
-                    if receive = '0' then
-                        accept <= '0';
-                        estadoTx <= esperaSend;
-                    end if;
+                    accept <= '0';
+                    estadoTx <= esperaSend;
              end case;   
      
 		end if;

@@ -35,13 +35,13 @@ begin
 			estadoTx <= transmiteDados;
 			prontoParaProximoDado <= '0';
    	 		send <= '0';
-		elsif clock'event and clock = '0' then
+		elsif clock'event and clock = '1' then
         --maquina de estados (protocolo de comunicacao)
 			case estadoTx is
 				when transmiteDados =>
 					if transmitirDado = '1' then
                        send <='1';
-                        prontoParaProximoDado <= '0';
+                       prontoParaProximoDado <= '0';
                        regDataOut <= dadoDaMaq;
                        estadoTx <= esperaAck;
                     else
@@ -51,20 +51,13 @@ begin
 				when esperaAck =>
 				       if ack = '1' then
                             send<='0';
-                            regDataOut <= x"00";
-                            estadoTx <=esperaFimAck;
+                            --regDataOut <= x"00";
+                            estadoTx <=transmiteDados;
+                            prontoParaProximoDado<= '1';
                        else
                             estadoTx <= esperaAck;	
                        end if;
-				when esperaFimAck => 
-                       if ack = '0' and transmitirDado = '0' then
-                            prontoParaProximoDado <= '1';
-                            estadoTx <= transmiteDados;
-                       else
-                            
-			                estadoTx <= esperaFimAck;
-
-			           end if;
+			
 				when others => null;
 			end case;
 		end if;
